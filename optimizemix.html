@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<head>
+
+<title>Prophet Predictive Analytics</title>
+
+    
+
+    
+
+
+
+<link href='http://fonts.googleapis.com/css?family=Raleway:200,300,500,100,700' rel='stylesheet' type='text/css'>
+<style>
+
+body {
+  font-family: "Raleway", sans-serif;
+   font-size:32px;
+  width: 1100px;
+  height: 516px;
+  position:relative;
+  
+
+
+  
+}
+
+svg {
+    
+    position:relative;
+	width: 100%;
+	height:100%;
+}
+
+path.slice{
+	stroke-width:2px;
+}
+
+polyline{
+	opacity: .3;
+	stroke: black;
+	stroke-width: 2px;
+	fill: none;
+}
+
+button {
+   background-color: rgb(45, 164, 169);
+   position:relative;
+  text-align:center;
+   width:200px;
+   height:80px;
+   font-family: "Raleway", sans-serif;
+   font-size:32px;
+  border-radius:8px;
+   color:white;
+   margin-top:10%;
+   
+    
+}
+
+.holder{
+    
+    text-align:center;
+    
+}
+
+</style>
+
+</head>
+<body>
+
+ <div id="devicePhone"
+         style="position:absolute; display: block; opacity: 1; overflow: hidden; pointer-events: auto; z-index: 0; background-image: url('images/device.png');">
+    </div>
+
+ <div id="header"
+         style="position:relative; z-index:2; opacity:1; margin-top: -10px;height:30%; width:100%; background-color: #3B4E57">
+
+<div id="titleBar"   style="position:relative; left:0; width:100%; height:100%; pointer-events: auto; opacity:.6; cursor:pointer">
+           <a href="http://www.simmonssharpe.com/mobile_app/prophet.html" target="_blank"><img src = "images/arrow.png"></a>
+  <!--<div id="menu"
+                 style="position: absolute; left:6%; width:12%; height:80%; align:center; background-image: url('images/bigback.png'); pointer-events: auto; opacity:.6; cursor:pointer">
+                </div>-->
+           <div id="title"
+                 style="position:absolute; left:14%; text-align: center; margin-top:-90px;color:white;width:70%; height:100%; font-weight:300;font-size:54px; opacity:1;">
+                PROPHET
+            </div>
+            </div>
+            
+             
+            </div>
+<div class = "holder">
+<button class="randomize">Optimize Mix</button>
+
+
+
+</div>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script>
+
+var svg = d3.select("body")
+	.append("svg")
+	.append("g")
+	
+
+svg.append("g")
+	.attr("class", "slices");
+svg.append("g")
+	.attr("class", "labels");
+svg.append("g")
+	.attr("class", "lines");
+	svg.append("text")
+   .attr("text-anchor", "middle")
+   //.text("Optimize Mix")
+   .style("font-size","24px");
+  
+var width = 1100,
+    height = 516,
+	radius = Math.min(width, height) / 2;
+
+var pie = d3.layout.pie()
+	.sort(null)
+	.value(function(d) {
+		return d.value;
+	})
+	
+	
+var arc = d3.svg.arc()
+	.outerRadius(radius * 0.8)
+	.innerRadius(radius * 0.4)
+	
+
+var outerArc = d3.svg.arc()
+	.innerRadius(radius * 0.9)
+	.outerRadius(radius * 0.9);
+
+svg.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+var key = function(d){ return d.data.label; };
+
+var color = d3.scale.ordinal()
+	.domain(["SEM", "Social", "Email", "Print"])
+	.range(["#F48FB1", "#FFAF49", "#7986CB", "#2DA4A9", "#a05d56", "#d0743c", "#ff8c00"]);
+	
+
+
+function randomData (){
+	var labels = color.domain();
+	return labels.map(function(label){
+		return { label: label, value: Math.random() }
+	});
+}
+
+change(randomData());
+
+d3.select(".randomize")
+	.on("click", function(){
+		change(randomData());
+	});
+
+
+function change(data) {
+
+	/* ------- PIE SLICES -------*/
+	var slice = svg.select(".slices").selectAll("path.slice")
+		.data(pie(data), key);
+
+	slice.enter()
+		.insert("path")
+		.style("fill", function(d) { return color(d.data.label); })
+		.attr("class", "slice");
+
+	slice		
+		.transition().duration(1000)
+		.attrTween("d", function(d) {
+			this._current = this._current || d;
+			var interpolate = d3.interpolate(this._current, d);
+			this._current = interpolate(0);
+			return function(t) {
+				return arc(interpolate(t));
+			};
+		})
+
+	slice.exit()
+		.remove();
+
+	/* ------- TEXT LABELS -------*/
+
+	var text = svg.select(".labels").selectAll("text")
+		.data(pie(data), key);
+
+	text.enter()
+		.append("text")
+		.attr("dy", ".35em")
+		.text(function(d) {
+			return d.data.label;
+		});
+	
+	function midAngle(d){
+		return d.startAngle + (d.endAngle - d.startAngle)/2;
+	}
+
+	text.transition().duration(1000)
+		.attrTween("transform", function(d) {
+			this._current = this._current || d;
+			var interpolate = d3.interpolate(this._current, d);
+			this._current = interpolate(0);
+			return function(t) {
+				var d2 = interpolate(t);
+				var pos = outerArc.centroid(d2);
+				pos[0] = radius * (midAngle(d2) < Math.PI ? 1 : -1);
+				return "translate("+ pos +")";
+			};
+		})
+		.styleTween("text-anchor", function(d){
+			this._current = this._current || d;
+			var interpolate = d3.interpolate(this._current, d);
+			this._current = interpolate(0);
+			return function(t) {
+				var d2 = interpolate(t);
+				return midAngle(d2) < Math.PI ? "start":"end";
+			};
+		});
+
+	text.exit()
+		.remove();
+
+	/* ------- SLICE TO TEXT POLYLINES ------- */
+
+	var polyline = svg.select(".lines").selectAll("polyline")
+		.data(pie(data), key);
+	
+	polyline.enter()
+		.append("polyline");
+
+	polyline.transition().duration(1000)
+		.attrTween("points", function(d){
+			this._current = this._current || d;
+			var interpolate = d3.interpolate(this._current, d);
+			this._current = interpolate(0);
+			return function(t) {
+				var d2 = interpolate(t);
+				var pos = outerArc.centroid(d2);
+				pos[0] = radius * 0.95 * (midAngle(d2) < Math.PI ? 1 : -1);
+				return [arc.centroid(d2), outerArc.centroid(d2), pos];
+			};			
+		});
+	
+	polyline.exit()
+		.remove();
+};
+
+</script>
+
+
+</body>

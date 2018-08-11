@@ -1,0 +1,270 @@
+body {
+    font-family:Raleway;
+    color:#FFFFFF;
+    padding:0px;
+    margin:0px;
+    border-width:0px;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-touch-callout: none;
+}
+
+#introButton:hover {
+    color:#000;
+}
+
+
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    pointer-events: none;
+}
+
+div {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border-width:0px;
+    padding:0px;
+    margin:0px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    font-family: Raleway;
+}
+
+div.chart-menu {
+    border-width:0px;
+    padding:0px;
+    margin:0px;
+    right:15px;
+    z-index:9999;
+}
+
+.intro {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    padding:0px;
+    color:#787878;
+    font-weight:300;
+    text-align:center;
+    position:absolute;
+    z-index:101;
+    background:rgba(0,0,0,.65);
+    opacity:0;
+}
+
+.intro img {
+    position:absolute;
+}
+
+.introItem {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    padding:0px;
+    position:absolute;
+}
+
+.vz-left-axis {
+    stroke: #FFF;
+    stroke-width: 0.5;
+    stroke-opacity: .5;
+}
+
+.vz-left-axis text {
+    stroke:none;
+    fill:#FFF;
+    font-weight: 300;
+}
+
+.vz-left-axis path.domain {
+    display:none;
+}
+
+.vz-series-plots {
+    fill:none;
+    stroke:#DDD;
+}
+
+.vz-area {
+    fill:#FFF;
+    fill-opacity: .5;
+    stroke:none
+}
+
+.vz-line {
+    stroke:#FFF;
+    stroke-opacity: 1;
+}
+
+.vz-skin-default {
+    position: absolute;
+}
+
+.tip-point-center {
+    fill:#FFF;
+}
+
+.tip-point-outer {
+    fill:#000;
+    stroke:#FFF;
+    stroke-opacity: .5;
+}
+
+.vz-pointer-label text{
+    fill:#FFF;
+    fill-opacity: 1;
+    stroke:none;
+    font-weight:300;
+}
+
+.vz-pointer-label rect{
+    fill:#000;
+    fill-opacity: .7;
+}
+
+.mobile-list-item{
+    border-top:1px solid;
+    border-color: #D9D9D9;
+    position:absolute;
+    overflow: hidden;
+}
+
+.mobile-item-button {
+    border-radius:2;
+    position:absolute;
+    display:inline-block;
+    padding:2px;
+    margin:0px;
+    border: solid 0px rgba(0,0,0,.2);
+    color: #FFFFFF;
+    font-family: Raleway;
+    z-index:30;
+}
+
+.mobile-item-button:hover {
+    background-color:rgba(255,255,255,.5);
+}
+
+.vizuly-pop_menu {
+    -moz-box-shadow: 3px 3px 4px rgba(0,0,0,.3);
+    -webkit-box-shadow: 3px 3px 4px rgba(0,0,0,.3);
+    box-shadow: 3px 3px 4px rgba(0,0,0,.3);
+    /* For IE 8 */
+    -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#000000')";
+    /* For IE 5.5 - 7 */
+    filter: progid:DXImageTransform.Microsoft.Shadow(Strength=2, Direction=135, Color='#000000');
+    padding:0px;
+    z-index:999;
+}
+
+.vz-pop_menu-item {
+    font-weight:300;
+    color:#000000;
+    cursor: pointer;
+}
+
+.vz-pop_menu-button {
+    background-image: url('../images/more_div.png');
+    background-size: cover;
+}
+
+.vz-pop_menu-item:hover {
+    font-weight:400;
+}
+
+.d3slider {
+  z-index: 2;
+  height: 100%;
+  background: none;
+}
+
+.d3slider-rect-range {
+  fill: #777;
+  stroke: none;
+}
+
+.d3slider-rect-value {
+  fill: #006EE3;
+  stroke: none;
+}
+
+.d3slider-axis {
+  position: relative;
+  z-index: 1;
+  cursor: pointer;
+}
+
+.d3slider-axis path {
+  display: none;
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.d3slider-axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+.d3slider text {
+  font: 10px sans-serif;
+}
+
+.tick.minor text {
+  display: none;
+}
+
+.tick line {
+  stroke-width: 1;
+}
+.tick.minor line {
+  stroke-width: 1;
+  stroke: #bbb;
+}
+
+.dragger rect {
+  fill: #71ACE3;
+  stroke: none;
+  z-index: 3;
+}
+
+.dragger line {
+  stroke: #aa0000;
+  fill: none;
+}
+
+.dragger-outer {
+  fill: #fff;
+  stroke: #000;
+}
+
+.dragger-inner {
+  fill: #B30424;
+  stroke: none;
+}
+
+.min-marker line {
+  stroke: #aa0000;
+  fill: none;
+}
+
+.overlay {
+  fill: none;
+  pointer-events: all;
+  z-index: 1;
+}

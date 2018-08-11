@@ -1,0 +1,285 @@
+<!--
+
+/*
+ Developed by Simmons Sharpe Inc. and modified from template software created by  BrightPoint Consulting, Inc.
+
+ This source code is covered under the following license: http://vizuly.io/commercial-license/
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+ THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS
+ OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+// @version 1.0.46
+
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <title>Prophet Predictive Analytics</title>
+
+    <meta charset="UTF-8">
+    <meta id="format-detection" content="telephone=no"/>
+    <meta id="apple-mobile-web-app-capable" content="yes"/>
+    <meta id="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <link rel="stylesheet" href="styles/vizuly.css">
+    <link rel="stylesheet" href="styles/vizuly_mobile_app.css">
+    <link rel="stylesheet" href="styles/d3.slider.css" />
+
+    <link href='http://fonts.googleapis.com/css?family=Raleway:200,300,500,100,700' rel='stylesheet' type='text/css'>
+<style>
+/*Style the slider*/
+
+input[type='range'] {
+    	-webkit-appearance: none !important;
+		-webkit-border-radius: 5px;
+	/*	background-color: rgb(53, 135, 212);*/
+        background-color: rgb(45, 164, 169);
+		height: 10px;
+		width: 140px;
+       
+		margin: 10px;
+         margin-left:16px;
+         margin-top:30px;
+	}
+
+	input[type='range']::-webkit-slider-thumb {
+		-webkit-appearance: none !important;
+		-webkit-border-radius: 15px;
+		background-color: #323232;
+		background-image: -webkit-gradient(linear, left top, left bottom, from(#bbb), to(#888));
+		border: 1px solid #000;
+       
+		height: 25px;
+		width: 25px;
+	}
+
+	#range {
+        color:white;
+		font: 20px Raleway;
+		font-weight:normal;
+
+    /*Style play button*/    
+
+	button {
+		
+		height: 100%;
+		background: rgb(53, 135, 212);
+		border: 1px solid rgb(53, 135, 212);
+		border-radius: 4px;
+	
+		color: white;
+		font: 20px Raleway;
+	}
+	
+	
+	
+
+</style>
+
+</head>
+<body>
+
+
+    <div id="devicePhone"
+         style="position:absolute; display: block; opacity: 1; overflow: hidden; pointer-events: auto; z-index: 0; background-image: url('images/device.png');">
+    </div>
+
+    <div id="header"
+         style="position:absolute; z-index:2; opacity:1; background-color: #3B4E57">
+
+        <div id="titleBar" class="noselect" style="position:relative; height:40%;">
+            <a href="http://www.simmonssharpe.com/mobile_app/prophet.html" target="_blank">
+                <div id="menu"
+                 style="position: absolute; left:0%; width:12%; height:100%; background-image: url('images/back.png'); pointer-events: auto; cursor:pointer">
+                </div>
+            </a>
+            <div id="title"
+                 style="position:absolute; left:15%; text-align: center; bottom:0; width:70%; height:65%; font-weight:300; opacity:0.6;">
+                PROPHET
+            </div>
+            <div id="infoButton"
+                 style="position:absolute; display:block; cursor:pointer; pointer-events:auto; right:3%; width:6.5%; height:100%; margin-top:3%; background-image: url('images/help_icon.png'); background-size:contain;">
+            </div>
+        </div>
+
+        <div id="date" class="noselect" style="position:absolute; top:42%; width:100%; text-align:center; font-weight:200; font-size:14px;">JAN 14, 2012</div>
+
+        <div id="scrollContainer" style="position:relative; left:0%; width:100%; height:10%; top:38%;">
+            <div id="leftScrollLabel"
+                 style="position:absolute; left:1%; height:100%; opacity:1; font-weight: 200;text-align:right; padding-right:1.5%; vertical-align: bottom"></div>
+
+            <div id="scrollDiv" style="position:absolute; top:40%; z-index:3; height:100%; opacity:0.8;"></div>
+
+            <div id="rightScrollLabel"
+                 style="position:absolute; right:1%; height:100%;  opacity:1; font-weight: 200; padding-left:1.5%; text-align:left;"></div>
+        </div>
+
+    </div>
+
+    <div id="chartsDiv" style="position:absolute; height:100%; width:100%; opacity: 1; overflow:hidden;"></div>
+          
+    <div style="position:absolute; z-index:4; display:none">
+        <input id="pointer" style="position:absolute; display:none" type="range" min="0" max="100" step=".1">
+    </div>
+
+
+    <div id="introDialog" class="intro">
+        <div id="intro1" class="introItem">
+            <img src="images/Intro_1.png" style="left:0">
+        </div>
+        <div id="intro4" class="introItem">
+            <img src="images/Intro_4.png" style="right:0">
+        </div>
+        <div id="intro3" class="introItem">
+            <img src="images/Intro_3.png" style="left:0">
+        </div>
+        <div id="intro2" class="introItem">
+            <img src="images/Intro_2.png" style="left:-25px">
+        </div>
+    </div>
+
+
+<div id ="sliderDiv"  style="position:absolute;  bottom:0;  opacity:1; height:12%;width:100%;background-color: #3B4E57">
+     
+
+     
+ <input id="slider" style = "margin-top:20px; margin-left:22px"; type="range" min=".00" max=".20" value=".04" step=".02"/>
+ 
+  <span id="buttonLabel" style = "margin-left:51px;" >Optimize</span>
+ 
+ <input id = "button"  onclick = "location.href='http://www.simmonssharpe.com/mobile_app/optimizemix.html';" style = "position:absolute; margin-top:6px;margin-left:12px;height:54px; width:54px; background: url(images/mixnomiddle.png) no-repeat"/>   
+ <br>
+   
+         <span id="sliderLabel" style = "margin-left:22px;" >Spend</span>
+         
+          <span id="buttonLabel2" style = "margin-left:87px;" >Mix</span>
+         
+        
+      
+     
+</div>
+
+
+</body>
+
+<script src="lib/d3.min_04_30_15.js"></script>
+<script src="lib/vizuly_core.min.js"></script>
+<script src="scripts/d3.slider.js"></script>
+<!-- debug source scripts: start -->
+<script src="scripts/d3.v3.min.js"></script>
+<script src="scripts/scroller.js"></script>
+<script src="scripts/pop_menu.js"></script>
+<script src="scripts/linearea_mobile_theme.js"></script>
+<script src="scripts/linearea_mobile.js"></script>
+<script src="scripts/main.js"></script>
+<script src="scripts/measure.js"></script>
+<script src="https://raw.github.com/fryn/html5slider/gh-pages/html5slider.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<!-- debug source scripts: end -->
+
+
+<script>
+
+
+    window.onload = function (e) {
+
+        // Check to see whether we are on a mobile display
+        mobile=isMobile();
+
+        // Set our click event for desktop vs mobile
+        if (mobile==true) {
+            touchClickEvent = "touchend"
+        }
+        else {
+            touchClickEvent = "click";
+        }
+
+
+        // Load our stock data
+        d3.csv("data/mobile_stocks.csv", function (csv) {
+
+            // Filter data to get only years above 2012.   You can adjust this to see how the chart
+            // looks with more or less data.
+            var data = csv.filter(function (d) { return d3.time.format("%m/%d/%Y").parse(d.date).getFullYear() > 12 });
+
+            // Nest stock values by symbol.
+            symbols = d3.nest()
+                    .key(function (d) {
+                        return d.symbol;
+                    })
+                    .entries(stocks = data);
+
+            // Parse dates and numbers. We assume values are sorted by date.
+            // Also compute the maximum price per symbol, needed for the y-domain.
+            symbols.forEach(function (s) {
+                s.values.forEach(function (d) {
+                    d.date = d3.time.format("%m/%d/%Y").parse(d.date);
+                });
+
+                menuItems.forEach(function(field) {
+                    s["max" + field] = d3.max(s.values, function (d) {
+                        return Math.max(d[field], d[field]);
+                    });
+                    s["min" + field] = d3.min(s.values, function (d) {
+                        return Math.min(d[field], d[field]);
+                    });
+                    s["sum" + field] = d3.sum(s.values, function (d) {
+                        return d[field];
+                    });
+                });
+
+            });
+
+            initialize();
+            update();
+
+        });
+    };
+
+    // We use a slight delay to prevent the resize operation from constantly
+    // re-rendering the display.
+    window.onresize = function (e) {
+
+        // If this is a mobile device we ignore resize operations.
+       if (mobile==true) return;
+
+        if (resizeTimeout != null) {
+            clearTimeout(resizeTimeout);
+            //Start clock over again
+            resizeTimeout = setTimeout(resize,300);
+        }
+        else {
+            resizeTimeout = setTimeout(resize,300);
+        }
+    };
+
+    // Used to re-render display after a delay on a resize;
+    var resizeTimeout;
+    function resize() {
+        location.reload();
+    }
+
+    // Hides the intro gesture information
+    function hideIntro() {
+        d3.select("body").on("mousedown.intro",null).on("touchstart",null);
+        d3.select("#introDialog").transition().style("opacity",0).each("end",function () { d3.select("#introDialog").style("display","none") });
+    }
+    
+    // Displays the intro gesture information.
+    function showIntro() {
+        d3.select("body").on("mousedown.intro",hideIntro).on("touchstart",hideIntro);
+        d3.select("#introDialog").style("display","block").transition().duration(700).style("opacity",1);
+    }
+
+
+
+
+</script>
+
+</html>
